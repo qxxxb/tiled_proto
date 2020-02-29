@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using TiledSharp;
 
 namespace TiledProto
@@ -13,6 +14,18 @@ namespace TiledProto
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         TmxMap map;
+        Texture2D tileset1;
+        Texture2D tileset2;
+        Texture2D tileset3;
+        Texture2D tileset4;
+
+        int tileWidth;
+        int tileHeight;
+        int tilesetTilesWide;
+    
+        int tilesetTilesHigh;
+    
+
 
         public Game1()
         {
@@ -42,8 +55,20 @@ namespace TiledProto
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            map = new TmxMap(@"Maps\example.tmx");
-        }
+            map = new TmxMap(@"Maps\ZeldaLevel.tmx");
+            tileset1 = Content.Load<Texture2D>("Blocks");
+            tileset2 = Content.Load<Texture2D>("Wall");
+            tileset3 = Content.Load<Texture2D>("Doors");
+       
+          
+
+            tileWidth = 32;
+            tileHeight = 32;
+
+            tilesetTilesWide = 32;
+            tilesetTilesHigh = 32;
+
+             }
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -77,7 +102,37 @@ namespace TiledProto
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+             spriteBatch.Begin();
+
+            for (var i = 0; i < map.Layers[0].Tiles.Count; i++) {
+                int gid = map.Layers[0].Tiles[i].Gid;
+
+                // Empty tile, do nothing
+                if (gid == 0) {
+
+                }
+                else {
+                    int tileFrame = gid - 1;
+                    int column = (int)Math.Floor((double)tileFrame / (double)tilesetTilesHigh);
+                    int row = (int)Math.Floor((double)tileFrame / (double)tilesetTilesWide);
+
+                   
+
+                    float x = (i % map.Width) * map.TileWidth;
+                    float y = (float)Math.Floor(i / (double)map.Width) * map.TileHeight;
+
+                    Rectangle tilesetRec1 = new Rectangle(tileWidth * column, tileHeight * row, tileWidth, tileHeight);
+                    
+
+                    spriteBatch.Draw(tileset1, new Rectangle((int)x, (int)y, tileWidth, tileHeight), tilesetRec1, Color.White);
+                    spriteBatch.Draw(tileset2, new Rectangle((int)x, (int)y, tileWidth, tileHeight), tilesetRec1, Color.White);
+                    spriteBatch.Draw(tileset3, new Rectangle((int)x, (int)y, tileWidth, tileHeight), tilesetRec1, Color.White);
+                   
+                    
+                }
+            }
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }

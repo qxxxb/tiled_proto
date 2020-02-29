@@ -53,7 +53,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="TiledSharp">
-      <HintPath>..\..\TiledSharp\TiledSharp\bin\Debug\net45\TiledSharp.dll</HintPath>
+      <HintPath>.\TiledSharp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
