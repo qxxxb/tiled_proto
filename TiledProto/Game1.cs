@@ -21,9 +21,12 @@ namespace TiledProto
 
         int tileWidth;
         int tileHeight;
-        int tilesetTilesWide;
-    
-        int tilesetTilesHigh;
+        int doorTilesetTilesWide;
+        int blockTilesetTilesWide;
+        int wallTilesetTilesWide;
+        int doorTilesetTilesHigh;
+        int wallTilesetTilesHigh;
+        int blockTilesetTilesHigh;
     
 
 
@@ -65,8 +68,12 @@ namespace TiledProto
             tileWidth = 32;
             tileHeight = 32;
 
-            tilesetTilesWide = 32;
-            tilesetTilesHigh = 32;
+            blockTilesetTilesWide = 22;
+            blockTilesetTilesHigh = 2;
+            wallTilesetTilesWide = 32;
+            wallTilesetTilesHigh = 22;
+            doorTilesetTilesWide = 20;
+            doorTilesetTilesHigh = 16;
 
              }
 
@@ -100,34 +107,57 @@ namespace TiledProto
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
              spriteBatch.Begin();
 
-            for (var i = 0; i < map.Layers[0].Tiles.Count; i++) {
+            for (int i = 0; i < map.Layers[0].Tiles.Count; i++) {
+                
                 int gid = map.Layers[0].Tiles[i].Gid;
-
+                 float x = ((i % map.Width) * map.TileWidth);
+                 float y = ((float)Math.Floor(i / (double)map.Width) * map.TileHeight);
                 // Empty tile, do nothing
                 if (gid == 0) {
 
                 }
                 else {
-                    int tileFrame = gid - 1;
-                    int column = (int)Math.Floor((double)tileFrame / (double)tilesetTilesHigh);
-                    int row = (int)Math.Floor((double)tileFrame / (double)tilesetTilesWide);
+                    int blockTileFrame = gid-1;
+                    int blockColumn = ((int)((double)blockTileFrame)%8);
+                    int blockRow = (int)Math.Floor((double)blockTileFrame / (double)blockTilesetTilesWide);
+
+
+                    if (gid >= 2369){
+                    int wallTileFrame = gid - 2369;
+                    int wallColumn = ((int)((double)wallTileFrame)%32);
+                    int wallRow = (int)Math.Floor((double)wallTileFrame / (double)wallTilesetTilesWide);
+
+                        Rectangle tilesetRec2 = new Rectangle(tileWidth * wallColumn, tileHeight * wallRow, tileWidth, tileHeight);
+                        spriteBatch.Draw(tileset2, new Rectangle((int)x, (int)y, tileWidth, tileHeight), tilesetRec2, Color.White);
+                    }
+
+                    if (gid < 2369){
+                    int doorTileFrame = gid - 2049;
+                    int doorColumn = ((int)((double)doorTileFrame)%20);
+                    int doorRow = (int)Math.Floor((double)doorTileFrame / (double)doorTilesetTilesWide);
+
+                    Rectangle tilesetRec3 = new Rectangle(tileWidth * doorColumn, tileHeight * doorRow, tileWidth, tileHeight);
+                    spriteBatch.Draw(tileset3, new Rectangle((int)x, (int)y, tileWidth, tileHeight), tilesetRec3, Color.White);
+                    }
+                   
 
                    
 
-                    float x = (i % map.Width) * map.TileWidth;
-                    float y = (float)Math.Floor(i / (double)map.Width) * map.TileHeight;
-
-                    Rectangle tilesetRec1 = new Rectangle(tileWidth * column, tileHeight * row, tileWidth, tileHeight);
+                    Rectangle tilesetRec1 = new Rectangle(tileWidth * blockColumn, tileHeight * blockRow, tileWidth, tileHeight);
+                    
                     
 
-                    spriteBatch.Draw(tileset1, new Rectangle((int)x, (int)y, tileWidth, tileHeight), tilesetRec1, Color.White);
-                    spriteBatch.Draw(tileset2, new Rectangle((int)x, (int)y, tileWidth, tileHeight), tilesetRec1, Color.White);
-                    spriteBatch.Draw(tileset3, new Rectangle((int)x, (int)y, tileWidth, tileHeight), tilesetRec1, Color.White);
+                    
+                  
                    
+                   
+                  
+                   
+                   spriteBatch.Draw(tileset1, new Rectangle((int)x, (int)y, tileWidth, tileHeight), tilesetRec1, Color.White);
                     
                 }
             }
