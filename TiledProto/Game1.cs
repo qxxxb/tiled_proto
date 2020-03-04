@@ -52,10 +52,10 @@ namespace TiledProto
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            graphics.PreferredBackBufferWidth = 1800;
-            graphics.PreferredBackBufferHeight = 800;
+            graphics.PreferredBackBufferWidth = 4000;
+            graphics.PreferredBackBufferHeight = 2000;
             graphics.ApplyChanges();
-        
+            
             this.IsMouseVisible = true;
 
             base.Initialize();
